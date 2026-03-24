@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+    stages {
+        stage('Clone repository') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Build image') {
+            steps {
+                script {
+                    docker.build("your-dockerhub-username/jenkins-demo")
+                }
+            }
+        }
+        stage('Push image') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credentials-id') {
+                        docker.image("your-dockerhub-username/jenkins-demo").push("latest")
+                    }
+                }
+            }
+        }
+    }
+}
