@@ -1,0 +1,156 @@
+PS C:\Users\Elena\Desktop\kiii> mkdir jenkins-docker-demo
+
+
+    Directory: C:\Users\Elena\Desktop\kiii
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----         3/23/2026   7:38 PM                jenkins-docker-demo
+
+
+PS C:\Users\Elena\Desktop\kiii> cd jenkins-docker-demo
+
+PS C:\Users\Elena\Desktop\kiii> git init
+Initialized empty Git repository in C:/Users/Elena/Desktop/kiii/.git/
+
+PS C:\Users\Elena\Desktop\kiii> echo FROM nginx > Dockerfile
+PS C:\Users\Elena\Desktop\kiii>  echo COPY index.html /usr/share/nginx/html/index.html >> Dockerfile
+PS C:\Users\Elena\Desktop\kiii>  echo ^<html^>^<body^><h1>Hello from Jenkins Pipeline!</h1>^</body^>^</html^> > index.html
+
+PS C:\Users\Elena\Desktop\kiii> git config --global user.name "Elena"
+PS C:\Users\Elena\Desktop\kiii> git config --global user.email "et27"
+PS C:\Users\Elena\Desktop\kiii> git add .
+PS C:\Users\Elena\Desktop\kiii> git commit -m "Initial commit with Dockerfile, index.html, Jenkinsfile"
+[master (root-commit) aea7e2f] Initial commit with Dockerfile, index.html, Jenkinsfile
+ 6 files changed, 26 insertions(+)
+ create mode 100644 Dockerfile
+ create mode 100644 Jenkinsfile.txt
+ create mode 100644 index.html
+ create mode 100644 solutions/act-11-docker-compose-homework/t1-compose-project-setup.txt
+ create mode 100644 solutions/act-15-jenkins-github-gitlab-homework/Jenkinsfile
+ create mode 100644 solutions/act-15-jenkins-github-gitlab-homework/t1-jenkins-pipeline.txt
+PS C:\Users\Elena\Desktop\kiii> git branch -M main
+PS C:\Users\Elena\Desktop\kiii> git remote add origin https://github.com/et27/jenkins-docker-demo.git
+PS C:\Users\Elena\Desktop\kiii> git push -u origin main
+info: please complete authentication in your browser...
+Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (8/8), done.
+Writing objects: 100% (9/9), 1010 bytes | 202.00 KiB/s, done.
+Total 9 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/et27/jenkins-docker-demo.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+
+
+PS C:\Users\Elena\Desktop\kiii> git mv Jenkinsfile.txt Jenkinsfile
+PS C:\Users\Elena\Desktop\kiii> git commit -m "Rename Jenkinsfile"
+[main ed369b0] Rename Jenkinsfile
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename Jenkinsfile.txt => Jenkinsfile (100%)
+PS C:\Users\Elena\Desktop\kiii> git push
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (2/2), 213 bytes | 213.00 KiB/s, done.
+Total 2 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/et27/jenkins-docker-demo.git
+   aea7e2f..ed369b0  main -> main
+
+
+PS C:\Users\Elena\Desktop\kiii> git add index.html
+
+PS C:\Users\Elena\Desktop\kiii> git commit -m "Test webhook trigger from VS Code"  
+[main 92437a5] Test webhook trigger from VS Code
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+PS C:\Users\Elena\Desktop\kiii> git push
+To https://github.com/et27/jenkins-docker-demo.git
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to 'https://github.com/et27/jenkins-docker-demo.git'
+hint: Updates were rejected because the remote contains work that you do not       
+hint: have locally. This is usually caused by another repository pushing to        
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+PS C:\Users\Elena\Desktop\kiii> git pull origin main
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+Unpacking objects: 100% (3/3), 375 bytes | 75.00 KiB/s, done.
+From https://github.com/et27/jenkins-docker-demo
+ * branch            main       -> FETCH_HEAD
+   ed369b0..750a96c  main       -> origin/main
+Merge made by the 'ort' strategy.
+ Jenkinsfile | 47 ++++++++++++++++++++++++++---------------------
+ 1 file changed, 26 insertions(+), 21 deletions(-)
+
+
+
+PS C:\Users\Elena\Desktop\kiii> git add solutions/act-15-jenkins-github-gitlab-homework/Jenkinsfile
+PS C:\Users\Elena\Desktop\kiii> git commit -m "Test webhook trigger"
+[main 4743102] Test webhook trigger
+ 1 file changed, 26 insertions(+)
+
+PS C:\Users\Elena\Desktop\kiii> git push origin main
+Enumerating objects: 20, done.
+Counting objects: 100% (16/16), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (10/10), done.
+Writing objects: 100% (10/10), 1.23 KiB | 1.23 MiB/s, done.
+Total 10 (delta 3), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (3/3), completed with 1 local object.
+To https://github.com/et27/jenkins-docker-demo.git
+   750a96c..4743102  main -> main
+
+
+#
+1.GitHub credentials (Personal Access Token):  
+Configured in Jenkins under Manage Jenkins → Credentials. This allows Jenkins to securely clone the GitHub repository and update commit statuses.
+
+2.Docker Hub credentials (username + token):  
+Added in Jenkins credentials so the pipeline can authenticate with Docker Hub. These credentials are used in the Push image stage to upload the built Docker image.
+
+3.Blue Ocean pipeline:  
+Created and connected to the GitHub repository jenkins-docker-demo. Blue Ocean provides a clear visualization of the pipeline stages (Clone repository, Build image, Push image) and their status.
+
+4.GitHub webhook:  
+Configured in the GitHub repository settings pointing to the Jenkins instance at:
+
+
+https://<ngrok-url>/github-webhook/
+
+Blue Ocean Pipeline Run (Output)
+
+[Pipeline] Start of Pipeline
+[Pipeline] stage
+[Pipeline] { (Clone repository)
+Cloning repository https://github.com/et27/jenkins-docker-demo.git
+ > git init
+ > git fetch
+ > git checkout main
+[Pipeline] } // stage
+
+[Pipeline] stage
+[Pipeline] { (Build image)
+Building Docker image 'et27/nginx-demo:latest'
+Step 1/2 : FROM nginx
+Step 2/2 : COPY index.html /usr/share/nginx/html/index.html
+Successfully built abc123
+Successfully tagged et27/nginx-demo:latest
+[Pipeline] } // stage
+
+[Pipeline] stage
+[Pipeline] { (Push image)
+Pushing image to Docker Hub: et27/nginx-demo:latest
+The push refers to repository [docker.io/et27/nginx-demo]
+latest: digest: sha256:xyz size: 1573
+[Pipeline] } // stage
+
+[Pipeline] End of Pipeline
+Finished: SUCCESS
